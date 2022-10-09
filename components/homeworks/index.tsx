@@ -1,11 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useState, useEffect, useId } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import Homework from './Homework'
 import s from './Homeworks.module.css'
 
 const Homeworks = () => {
   const queryClient = useQueryClient()
+  const [homeworks, setHomeworks] = useState<any>([])
 
   const [formValues, setFormValues] = useState({
     title: '',
@@ -18,7 +19,13 @@ const Homeworks = () => {
       .from('homeworks')
       .select()
       .order('created_at', { ascending: false })
-  const { data, status } = useQuery(['homeworks'], fetchHomeworks)
+  const { data, status } = useQuery(['homeworks'], fetchHomeworks, {
+    refetchOnWindowFocus: false,
+  })
+
+  useEffect(() => {
+    setHomeworks((data?.data || []) as any)
+  }, [data])
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -36,9 +43,19 @@ const Homeworks = () => {
     if (error) {
       throw error
     } else {
-      console.log('data', data)
+      setHomeworks((prev: typeof homeworks) => [...prev, { ...data[0] }])
     }
-    queryClient.invalidateQueries(['homeworks'])
+  }
+
+  const handleDeleteHomework = async (id: number) => {
+    const { error } = await supabase.from('homeworks').delete().eq('id', id)
+    if (error) {
+      console.log('error', error)
+    } else {
+      setHomeworks((prev: typeof homeworks) =>
+        prev.filter((h: typeof homeworks) => h.id !== id),
+      )
+    }
   }
 
   return status === 'loading' ? (
@@ -69,13 +86,14 @@ const Homeworks = () => {
       />
       <button className="btn">Add</button>
       <div className={s.homeworks}>
-        {data!.data!.map((homework: any) => (
+        {homeworks.map((homework: any) => (
           <Homework
             key={homework.id}
             id={homework.id}
             title={homework.title}
             description={homework.description}
             rating={homework.rating}
+            onDelete={handleDeleteHomework}
           />
         ))}
       </div>
