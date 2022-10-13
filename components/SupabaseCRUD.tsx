@@ -6,7 +6,7 @@ const SupabaseCRUD = () => {
     supabase
       .from('homeworks')
       .select()
-      .in('id', [2, 3, 4, 5])
+      // .in('id', [2, 3, 4, 5])
       .order('created_at', { ascending: false })
   const { data, status } = useQuery(['homeworks'], fetchHomeworks)
 
@@ -56,7 +56,6 @@ const SupabaseCRUD = () => {
     <div>Loading...</div>
   ) : (
     <>
-      <pre>{JSON.stringify(data!.data, null, 2)}</pre>
       <button className="btn" onClick={handleAddHomework}>
         Add
       </button>
@@ -66,6 +65,7 @@ const SupabaseCRUD = () => {
       <button className="btn" onClick={handleDeleteHomework}>
         Delete
       </button>
+      <pre>{JSON.stringify(data!.data, null, 2)}</pre>
     </>
   )
 }

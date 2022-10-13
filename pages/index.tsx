@@ -1,5 +1,5 @@
-import SupabaseCRUD from '../components/SupabaseCRUD'
+import Homeworks from '../components/homeworks'
 
-export default function Home() {
-  return <SupabaseCRUD />
+export default function HomeWorksPage() {
+  return <Homeworks />
 }

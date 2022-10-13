@@ -27,7 +27,7 @@ const Homeworks = () => {
     setHomeworks((data?.data || []) as any)
   }, [data])
 
-  const handleChange = (e: any) => {
+  const handleFormChange = (e: any) => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
@@ -43,7 +43,7 @@ const Homeworks = () => {
     if (error) {
       throw error
     } else {
-      setHomeworks((prev: typeof homeworks) => [...prev, { ...data[0] }])
+      setHomeworks((prev: typeof homeworks) => [{ ...data[0] }, ...prev])
     }
   }
 
@@ -66,14 +66,14 @@ const Homeworks = () => {
       <input
         name="title"
         id="title"
-        onChange={handleChange}
+        onChange={handleFormChange}
         value={formValues.title}
       />
       <label htmlFor="description">Description</label>
       <input
         name="description"
         id="description"
-        onChange={handleChange}
+        onChange={handleFormChange}
         value={formValues.description}
       />
       <label htmlFor="rating">Rating</label>
@@ -81,7 +81,7 @@ const Homeworks = () => {
         name="rating"
         id="rating"
         type="number"
-        onChange={handleChange}
+        onChange={handleFormChange}
         value={formValues.rating}
       />
       <button className="btn">Add</button>
@@ -93,6 +93,7 @@ const Homeworks = () => {
             title={homework.title}
             description={homework.description}
             rating={homework.rating}
+            createdAt={homework.created_at}
             onDelete={handleDeleteHomework}
           />
         ))}
