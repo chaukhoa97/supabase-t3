@@ -1,11 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState, useEffect, useId } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import Homework from './Homework'
 import s from './Homeworks.module.css'
 
 const Homeworks = () => {
-  const queryClient = useQueryClient()
   const [homeworks, setHomeworks] = useState<any>([])
 
   const [formValues, setFormValues] = useState({
