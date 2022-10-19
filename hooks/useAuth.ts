@@ -26,7 +26,7 @@ export default function useAuth() {
       (_event, session) => {
         setSession(session)
       },
-    )
+    ) as any
 
     return () => {
       mounted = false
